@@ -1,0 +1,55 @@
+.button {
+	
+	width: 80px;
+	height: 30px;
+	margin-top: 14px;
+	border: none;
+	border-radius: 8px;
+	background-color: rgb(51, 59, 134);
+	color: #fff;
+	cursor: pointer;
+	outline: none;
+	left:650px;
+}
+#canvas1{
+	position: absolute;
+	top: 50px;	
+	left: 50px;
+}
+#canvas2{
+	position: absolute;
+	top: 50px;	
+	left: 50px;
+}
+.img{
+	position: absolute;
+	opacity: 0.5;
+	width: 10px;
+	
+}
+form{
+	position: fixed;
+	left: 6px;
+	top: 03px;	
+	
+}
+.point{
+	position: absolute;
+	height: 11px ;	
+	width: 11px;
+	top: 80px;
+	margin-left:6px;
+	border-radius: 5px;
+	background-color: rgb(233, 216, 216);
+	opacity: 0.5;
+	font-size: 7px;
+/*	font-stretch: extra-condensed;*/
+	font-weight: bolder;
+	color: black;
+	border-style: solid ;
+	border-width: 1px;
+/*	border-color: black;*/
+	padding : 0px;
+	
+}
+
