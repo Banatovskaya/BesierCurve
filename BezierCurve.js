@@ -2,7 +2,7 @@
 
 var canvas1 = document.querySelectorAll("canvas")[0];
 var canvas2 = document.querySelectorAll("canvas")[1];
-var context1 = canvas1.getContext("2d");//задумка чтоб на этот контекст вынести статичные рисунки пока не использовала
+var context1 = canvas1.getContext("2d"); //задумка чтоб на этот контекст вынести статичные рисунки пока не использовала
 var context2 = canvas2.getContext("2d");
 let btn = document.querySelectorAll("button")[0];
 let pointQuantity = document.querySelector("input");
@@ -20,7 +20,7 @@ let interval = 0.001;
 let pointMove;
 
 context1.strokeStyle = "red";
-context1.strokeRect(0, 0, 600, 400);
+context1.strokeRect(0, 0, 800, 600);
 context2.strokeStyle = "green";
 context2.strokeRect(5, 5, 990, 790);
 
@@ -56,14 +56,17 @@ param.addEventListener("mousedown", function (e) {
 canvas2.addEventListener("mousemove", function (e) {
    if (flgMouseDown) {
       clearInterval(timerMoveLine);
-      
-         let x = e.clientX;
-         let y = e.clientY;
-         pointMove.style.left = `${x}px`;
-         pointMove.style.top = `${y}px`;
-         requestAnimationFrame(function (time) {
+
+      let x = e.clientX;
+      let y = e.clientY;
+      pointMove.style.left = `${x}px`;
+      pointMove.style.top = `${y}px`;
+      requestAnimationFrame(function (time) {
          clearContext2();
-         countArrMainPoint(point); // paint main line than it move
+         //   countArrMainPoint(point); // paint main line than it move
+         let mainPoint = countArrMainPoint(point); // paint support line than it move
+         countSupportLine(mainPoint, int);
+         countFunction(mainPoint);
          if (flgStart == true && flgCountFinish == false) {
             let mainPoint = countArrMainPoint(point); // paint support line than it move
             countSupportLine(mainPoint, int); // paint support line than it move
@@ -85,7 +88,7 @@ document.addEventListener("mouseup", function (e) {
    once: false
 });
 
-function draw(arr, lineWidth) {  // добавить через requestAnimationFrame
+function draw(arr, lineWidth) { // добавить через requestAnimationFrame
    let color = {
       0: "PaleTurquoise",
       1: "DarkSalmon",
@@ -132,7 +135,7 @@ function countArrMainPoint(arr) {
 };
 
 function clearContext2() {
-   context2.clearRect(5, 5, 590, 490);
+   context2.clearRect(5, 5, 800, 600);
 }
 
 
@@ -146,11 +149,13 @@ function supportLineAnimation(arr) {
       clearContext2();
       countArrMainPoint(point);
       drawFuncion(f);
+      console.log("4444")
       countSupportLine(arr, int);
       if (int < 1) {
-         int = Math.round((int + interval)*1000)/1000;
-         if (int > 1) {
+         int = Math.round((int + interval) * 1000) / 1000;
+         if (int >= 1) {
             int = 1;
+            clearInterval(timerMoveLine);
             flgCountFinish = true;
          }
       }
@@ -163,14 +168,14 @@ function countSupportLine(arr, int) {
    let obj = {};
    for (let i = 0; i < arr.length - 1; i++) {
       // distance betveen 2 point * interval
-      obj.x = Math.round(((arr[i + 1].x - arr[i].x) * int + arr[i].x)*100)/100;
-      obj.y = Math.round(((arr[i + 1].y - arr[i].y) * int + arr[i].y)*100)/100;
+      obj.x = Math.round(((arr[i + 1].x - arr[i].x) * int + arr[i].x) * 100) / 100;
+      obj.y = Math.round(((arr[i + 1].y - arr[i].y) * int + arr[i].y) * 100) / 100;
       nextPoint[i] = Object.assign({}, obj);
    };
    if ((arr.length) > 2) {
       draw(nextPoint, 2)
       countSupportLine(nextPoint, int);
-      
+
    } else {
       let x = nextPoint[0].x;
       let y = nextPoint[0].y;
@@ -184,39 +189,40 @@ function countFunction(array) {
    let i = 0;
    for (let i = 0;; i++) {
       f[i] = Object.assign({}, paint(array, d));
-      d = Math.round((d + 0.01)*100)/100;
+      d = Math.round((d + 0.01) * 100) / 100;
       if (d >= 1) break;
    }
    drawFuncion(f);
 }
 
 
-  let o = {};
+let o = {};
+
 function paint(arr, d) {
-   
+
    let nextPoint = [];
    let obj = {};
    //  let a;
    for (let i = 0; i < arr.length - 1; i++) {
       // distance betveen 2 point * interval
-      obj.x = Math.round(((arr[i + 1].x - arr[i].x) * d + arr[i].x)*100)/100;
-      obj.y = Math.round(((arr[i + 1].y - arr[i].y) * d + arr[i].y)*100)/100;
-  // obj.x = (arr[i + 1].x - arr[i].x) * d + arr[i].x;
-   //   obj.y = (arr[i + 1].y - arr[i].y) * d + arr[i].y;
+      obj.x = Math.round(((arr[i + 1].x - arr[i].x) * d + arr[i].x) * 100) / 100;
+      obj.y = Math.round(((arr[i + 1].y - arr[i].y) * d + arr[i].y) * 100) / 100;
+      // obj.x = (arr[i + 1].x - arr[i].x) * d + arr[i].x;
+      //   obj.y = (arr[i + 1].y - arr[i].y) * d + arr[i].y;
       nextPoint[i] = Object.assign({}, obj);
-   
+
    };
    if ((arr.length) > 2) {
       paint(nextPoint, d);
-      } else {
+   } else {
       o.x = nextPoint[0].x;
       o.y = nextPoint[0].y;
- 
+
    }
    return (o);
 }
 
-function drawFuncion(arr) {  // добавить через requestAnimationFrame
+function drawFuncion(arr) { // добавить через requestAnimationFrame
    context2.beginPath();
    context2.lineWidth = 3;
    context2.strokeStyle = "blue";
@@ -235,6 +241,14 @@ function count() {
 
 let flgStart = false;
 start.addEventListener("click", function (event) {
-   count();
-   flgStart = true;
+
+   flgStart = !flgStart;
+   if (flgStart == true) {
+      count();
+   } else {
+      clearInterval(timerMoveLine);
+      console.log(timerMoveLine)
+   }
+
+   console.log(flgStart)
 });
